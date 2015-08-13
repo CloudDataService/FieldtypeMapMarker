@@ -106,6 +106,33 @@ class MapMarker extends WireData {
 		return $this->status;
 	}
 
+	public function distance($lat = 0, $lng = 0, $unit = 'mi') {
+		$lat1 = $lat;
+		$lat2 = $this->lat;
+		$lng1 = $lng;
+		$lng2 = $this->lng;
+
+		$theta = $lng1 - $lng2;
+		$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+		$dist = acos($dist);
+		$dist = rad2deg($dist);
+		$miles = $dist * 60 * 1.1515;
+
+		switch (strtolower($unit)) {
+			case 'km':
+			case 'k':
+				$d = ($miles * 1.609344);
+			break;
+
+			case 'mi':
+			case 'm':
+				$d = $miles;
+			break;
+		}
+
+		return $d;
+	}
+
 	/**
 	 * If accessed as a string, then just output the lat, lng coordinates
 	 *
